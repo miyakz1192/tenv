@@ -31,3 +31,13 @@ ip netns exec 10_0_0_0 /home/a/tenv/dnsmasq.sh tenv_n_1 10.0.0.1,10.0.0.252 /hom
 a@tenv:~/tenv$ 
 
 
+#create pvm(network namespace)
+sudo ./pvm_cli.rb create --name pvm1 --on localhost
+
+#delete pvm(network namspeace)
+sudo ./pvm_cli.rb delete --name pvm1 --on localhost
+
+#associate pvm(network namspeace) to pvm(virtual machine)
+sudo ./pvmlink_cli.rb create --pvm pvm1 --on localhost --ovs 10_0_0_0
+
+
