@@ -1,0 +1,35 @@
+
+require "common"
+
+class BridgeOperator < TEnv
+  def self.create(type)
+    #upcase type's first
+    class_name="#{type[0].to_s.upcase}#{type[1, type.size]}BridgeOperator"
+    Kernel.const_get(class_name).new
+  end
+end
+
+class OvsBridgeOperator < BridgeOperator
+  def add_bridge(name)
+    cmd_retry "brctl addbr #{name}"
+  end
+  
+  def delete_bridge(name)
+    _cmd "brctl delbr #{name}"
+  end
+
+  def add_interface(br_name, if_name)
+    cmd "brctl addif #{br_name} #{if_name}"
+  end
+end
+
+class NormalBridgeOperator < BridgeOperator
+  def add_bridge(name)
+  end
+  
+  def delete_bridge(name)
+  end
+
+  def add_interface(br_name, if_name)
+  end
+end
