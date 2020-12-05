@@ -62,7 +62,7 @@ class NetworkNameSpace
   end
 
   def netdevs
-    exec_root("ip netns exec #{name} ifconfig -a | grep HWaddr | awk '{print $1}'").split("\n")
+    exec_root("ip netns exec #{name} ifconfig -a | grep ether | awk '{print $1}'").split("\n")
   end
 
   def ovs_daemon_boot?
@@ -76,13 +76,13 @@ class NetworkNameSpace
     cmd_res = exec_root("ip netns exec #{name} ifconfig -a")
     _temp_cmd_res = cmd_res.split("\n")
 
-    cmd_res.each_with_index do |info, index|
+    cmd_res.split("\n").each_with_index do |info, index|
       info.strip!
-      next unless info =~ /HWaddr/
+      next unless info =~ /ether/
       
       #hit new network interface info
       name = info.split[0]
-      mac = info.split("HWaddr")[1].strip
+      mac = info.split("ether")[1].strip
       ip = "" #default value is void string
 
       #ip address is next line
@@ -143,7 +143,7 @@ protected
   end
 
   def get_netdevs_in_system(host = PVmhost.localhost)
-    devs = host.exec_root('ifconfig -a | grep HWaddr | awk \'{print $1}\'').split("\n")
+    devs = host.exec_root('ifconfig -a | grep ether | awk \'{print $1}\'').split("\n")
     NetworkNameSpace.all(host).each do |netns|
       devs << netns.netdevs
     end
