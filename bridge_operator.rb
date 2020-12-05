@@ -11,7 +11,7 @@ class BridgeOperator < TEnv
       puts "#{class_name}"
       return Kernel.const_get(class_name).new
     rescue
-      return NormalBridgeOperator.new
+      return OvsBridgeOperator.new
     end
   end
 end

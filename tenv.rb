@@ -10,7 +10,8 @@ def usage
   cmdstr = ""
   header = "USAGE: tenv" 
   spacer = " " * header.size + " "
-  `ls *_cli.rb`.inject(cmdstr){|cmdstr, cli| cmdstr += cli.strip.gsub(/_cli.rb/,"\n#{spacer}")}
+  cmdstr = `ls *_cli.rb`.split("\n").inject(""){|cmdstr, cli| cmdstr += cli.strip.gsub(/_cli.rb/,"\n#{spacer}")}
+
   puts  "#{header} #{cmdstr}"
 end
 

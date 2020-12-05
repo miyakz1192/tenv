@@ -1,0 +1,33 @@
+#create sw with name "test" dhcp server ip and switch ip , and dhcp range
+sudo ./sw_cli.rb  create --name test --dhcpip 10.0.0.1 --swip 10.0.0.2 --prefix 24 --range 10.0.0.3,10.0.0.254
+
+#delete sw test
+sudo ./sw_cli.rb  delete --name test
+
+#create method below is the simplest
+#sw ip is 254, dhcp is 253, range is 1~252
+a@tenv:~/tenv$ sudo ./sw_cli.rb  create --subnet 10.0.0.0 --prefix 24 
+=== initialize ===
+type=
+=== setup ===
+=== make_bridge ===
+ovs-vsctl add-br 10_0_0_0
+=== make_ns_with_bridge_name === 
+ip netns add 10_0_0_0
+TRACE: uniq devname pair tenv_n_0 tenv_n_1
+ip link add name tenv_n_0 type veth peer name tenv_n_1
+ip link add name tenv_n_0 type veth peer name tenv_n_1 => pid 13827 exit 0
+ip link set dev tenv_n_1 netns 10_0_0_0
+ip link set dev tenv_n_1 netns 10_0_0_0 => pid 13833 exit 0
+ovs-vsctl add-port 10_0_0_0 tenv_n_0
+ovs-vsctl add-port 10_0_0_0 tenv_n_0 => pid 13838 exit 0
+ip netns exec 10_0_0_0 ifconfig tenv_n_1 10.0.0.254/24 up
+ip netns exec 10_0_0_0 ifconfig tenv_n_1 10.0.0.254/24 up => pid 13840 exit 0
+ifconfig 10_0_0_0 10.0.0.253/24 up
+ifconfig 10_0_0_0 10.0.0.253/24 up => pid 13841 exit 0
+ifconfig tenv_n_0 up
+ifconfig tenv_n_0 up => pid 13842 exit 0
+ip netns exec 10_0_0_0 /home/a/tenv/dnsmasq.sh tenv_n_1 10.0.0.1,10.0.0.252 /home/a/tenv/data 10_0_0_0
+a@tenv:~/tenv$ 
+
+
