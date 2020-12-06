@@ -38,6 +38,10 @@ sudo ./pvm_cli.rb create --name pvm1 --on localhost
 sudo ./pvm_cli.rb delete --name pvm1 --on localhost
 
 #associate pvm(network namspeace) to pvm(virtual machine)
-sudo ./pvmlink_cli.rb create --pvm pvm1 --on localhost --ovs 10_0_0_0
+sudo ./pvmlink_cli.rb create --pvm pvm1 --on localhost --ovs 10_0_0_0 --tag 1 --ipaddress 10.0.0.10 --prefix 24
 
+
+##### byebug #####
+b NetworkNameSpace#get_uniq_devname_pair #this will not work until target source code is loaded by byebug
+b common.rb:154
 

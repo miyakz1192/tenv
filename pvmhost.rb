@@ -189,7 +189,7 @@ public
     end
     sleep 1
     #addopt newest ifconfig command
-    mac = exec_root("ip netns exec #{pvm_name} ifconfig -a | grep #{dev_ns} -A 1| grep ether | awk '{print $2}'").strip
+    mac = exec_root("ip netns exec #{pvm_name} ifconfig -a | grep #{dev_ns} -A 4| grep ether | awk '{print $2}'").strip
     create_logical_attachment(:ovs_name => ovs_name,
                               :devname => dev_br,
                               :iface_id => dev_br,

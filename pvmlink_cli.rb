@@ -51,7 +51,7 @@ if ARGV[0] == "list"
   template = "%11s|%8s|%8s|%15s|%4s|%7s|%17s\n"
   printf(template,"pvm","dev","ldev","ip address","vlan","sw","mac")
   PVmhost.alived_hosts.each do |pvmhost|
-    next if pvmhost.local?
+#    next if pvmhost.local?
     pvmhost.pvms.each do |pvm|
       pvm.network_interfaces.each do |nif|
         printf(template, 

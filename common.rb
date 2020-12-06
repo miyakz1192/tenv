@@ -44,7 +44,8 @@ class NetworkNameSpace
   attr_reader :name
 
   def initialize(name, host = PVmhost.localhost)
-    @name = name
+    @name = name.split(" ")[0] #normalize for example 10_0_0_0 (id: 0)
+                               #we believe left side name as true network namespace name!
     @host = host
   end
 
@@ -62,7 +63,7 @@ class NetworkNameSpace
   end
 
   def netdevs
-    exec_root("ip netns exec #{name} ifconfig -a | grep ether | awk '{print $1}'").split("\n")
+    exec_root("ip netns exec #{name} ifconfig -a | grep mtu | awk '{print $1}'|sed -e \"s/://g\"").split("\n")
   end
 
   def ovs_daemon_boot?
@@ -143,7 +144,7 @@ protected
   end
 
   def get_netdevs_in_system(host = PVmhost.localhost)
-    devs = host.exec_root('ifconfig -a | grep ether | awk \'{print $1}\'').split("\n")
+    devs = host.exec_root('ifconfig -a | grep mtu | awk \'{print $1}\'|sed -e "s/://g"').split("\n")
     NetworkNameSpace.all(host).each do |netns|
       devs << netns.netdevs
     end
